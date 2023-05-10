@@ -2,28 +2,14 @@ package com.example.scrollvideo
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.media3.common.MediaItem
-import androidx.media3.exoplayer.ExoPlayer
-import androidx.media3.exoplayer.hls.DefaultHlsDataSourceFactory
-import androidx.media3.exoplayer.hls.HlsDataSourceFactory
-import androidx.media3.exoplayer.hls.HlsMediaSource
+import androidx.databinding.DataBindingUtil
+import androidx.media3.common.Player
 import androidx.recyclerview.widget.RecyclerView
 import com.example.scrollvideo.databinding.ItemVideoBinding
 
 
-class VideoPlayAdapter() :
-    RecyclerView.Adapter<VideoPlayAdapter.MyViewHolder>() {
-    lateinit var list: ArrayList<String>
-    fun setItems(dataList: List<String>) {
-        list = dataList as ArrayList<String>
-        notifyDataSetChanged()
-    }
-
-    fun upDateItem(dataList: ArrayList<String>) {
-        list.addAll(dataList)
-        notifyDataSetChanged()
-    }
-
+class VideoPlayAdapter(var list: ArrayList<VideoModel>) :
+    RecyclerView.Adapter<VideoPlayAdapter.MyViewHolder>() ,PlayerStateCallback{
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int,
@@ -34,34 +20,64 @@ class VideoPlayAdapter() :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
+        val position = holder.adapterPosition
+        PlayerViewAdapter.releaseRecycledPlayers(position)
+        super.onViewRecycled(holder)
         holder.bindItem(list[position])
     }
-
+    override fun onViewRecycled(holder: VideoPlayAdapter.MyViewHolder) {
+        val position = holder.adapterPosition
+        PlayerViewAdapter.releaseRecycledPlayers(position)
+        super.onViewRecycled(holder)
+    }
     override fun getItemCount(): Int {
         return list.size
     }
 
-    class MyViewHolder(val binding: ItemVideoBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-        fun bindItem(bean: String) {
-            val dataSourceFactory: HlsDataSourceFactory.Factory = DefaultHlsDataSourceFactory.Factory()
-            val temp ="https://vz-113d2b6a-c38.b-cdn.net/9c218eb2-0411-4e52-bf6d-ee26a47bd151/playlist.m3u8"
-//            val hlsMediaSource =
-//                HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(temp))
-            val hlsMediaSource =
-                HlsMediaSource.Factory(dataSourceFactory)
-                    .setAllowChunklessPreparation(false)
-                    .createMediaSource(MediaItem.fromUri(temp))
-//            val hlsMediaSource = HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri("https://vz-113d2b6a-c38.b-cdn.net/9c218eb2-0411-4e52-bf6d-ee26a47bd151/playlist.m3u8"))
-            val player = ExoPlayer.Builder(itemView.context).build()
-            player.setMediaItem(hlsMediaSource)
-            binding.media3PlayerView.player = player
+  inner class MyViewHolder(val binding: ItemVideoBinding) : RecyclerView.ViewHolder(binding.root) {
+        fun bindItem(bean: VideoModel) {
 
-            // Prepare the player.
-            player.prepare()
-            // Start the playback.
-            player.play()
+            binding.apply {
+                video = bean
+                callback =this@VideoPlayAdapter
+                    index = absoluteAdapterPosition
+                executePendingBindings()
+            }
+
+//            val dataSourceFactory: DataSource.Factory = DefaultHttpDataSource.Factory()
+//
+//            val hlsMediaSource =
+//                HlsMediaSource.Factory(dataSourceFactory).createMediaSource(MediaItem.fromUri(bean))
+//
+//            val player = ExoPlayer.Builder(itemView.context).build()
+//
+//            player.setMediaSource(hlsMediaSource)
+//            binding.media3PlayerView.player = player
+//
+//            player.prepare()
+//            player.play()
+
+
+//           BasePlayer.play(itemView.context,binding.media3PlayerView,bean)
+
+
 
         }
+    }
+
+    override fun onVideoDurationRetrieved(duration: Long, player: Player) {
+
+    }
+
+    override fun onVideoBuffering(player: Player) {
+
+    }
+
+    override fun onStartedPlaying(player: Player) {
+
+    }
+
+    override fun onFinishedPlaying(player: Player) {
+
     }
 }

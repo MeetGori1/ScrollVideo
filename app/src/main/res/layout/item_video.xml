@@ -1,24 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/black"
-    app:cardCornerRadius="3dp"
-    app:cardElevation="4dp">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!--    <androidx.appcompat.widget.AppCompatTextView-->
-    <!--        android:id="@+id/txtText"-->
-    <!--        android:layout_width="match_parent"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:text="dwe"-->
-    <!--        android:textColor="@color/black"/>-->
+    <data>
 
-    <androidx.media3.ui.PlayerView
-        android:id="@+id/media3PlayerView"
+        <variable
+            name="video"
+            type="com.example.scrollvideo.VideoModel" />
+        <variable
+            name="callback"
+            type="com.example.scrollvideo.PlayerStateCallback"/>
+
+        <variable
+            name="index"
+            type="int"/>
+    </data>
+
+    <androidx.appcompat.widget.LinearLayoutCompat
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:show_buffering="when_playing"
-        app:use_controller="false" />
+        android:background="@color/white"
+        android:orientation="vertical"
+       >
 
-</com.google.android.material.card.MaterialCardView>
+<!--            <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:id="@+id/txtTextindex"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:text="@{video.index}"-->
+<!--                android:textColor="@color/white"/>-->
+
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--                android:id="@+id/txtText"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--            android:layout_marginTop="10dp"-->
+<!--                android:text="@{video.url}"-->
+<!--            android:layout_gravity="center"-->
+<!--                android:textColor="@color/black"/>-->
+
+        <androidx.media3.ui.PlayerView
+            android:id="@+id/media3PlayerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:show_buffering="when_playing"
+            app:use_controller="true"
+
+            app:on_state_change="@{callback}"
+            app:progressbar="@{progressBar}"
+            app:thumbnail="@{thumbnail}"
+            app:item_index="@{index}"
+            app:video_url="@{video.url}" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="#fff"
+            android:scaleType="centerCrop"
+            app:thumbnail="@{video.thumbnail}" />
+    </androidx.appcompat.widget.LinearLayoutCompat>
+</layout>
