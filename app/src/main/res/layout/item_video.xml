@@ -38,6 +38,16 @@
         <!--                android:text="@{video.url}"-->
         <!--            android:layout_gravity="center"-->
         <!--                android:textColor="@color/black"/>-->
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="#fff"
+            android:scaleType="fitXY"
+            app:thumbnail="@{video.thumbnail}"
+            android:visibility="@{video.type}"
+            />
 
         <androidx.media3.ui.PlayerView
             android:id="@+id/media3PlayerView"
@@ -60,13 +70,6 @@
             android:layout_gravity="center"
             android:visibility="gone" />
 
-        <androidx.appcompat.widget.AppCompatImageView
-            android:id="@+id/thumbnail"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:adjustViewBounds="true"
-            android:background="#fff"
-            android:scaleType="centerCrop"
-            app:thumbnail="@{video.thumbnail}" />
+
     </androidx.appcompat.widget.LinearLayoutCompat>
 </layout>

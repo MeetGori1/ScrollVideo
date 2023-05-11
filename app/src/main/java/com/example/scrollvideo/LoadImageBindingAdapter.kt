@@ -1,10 +1,12 @@
 package com.example.scrollvideo
 
+import android.view.View
 import android.widget.ImageView
 import androidx.databinding.BindingAdapter
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
+
 
 class LoadImageBindingAdapter {
     companion object{
@@ -21,6 +23,12 @@ class LoadImageBindingAdapter {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(view)
             }
+        }
+
+        @JvmStatic
+        @BindingAdapter("android:visibility")
+        fun setVisibility(view: View, value: Boolean) {
+            view.visibility = if (value) View.VISIBLE else View.GONE
         }
     }
 }

@@ -114,11 +114,11 @@ class PlayerViewAdapter {
             player = ExoPlayer.Builder(context)
                 .setRenderersFactory(DefaultRenderersFactory(context).setEnableDecoderFallback(true))
                 .setMediaSourceFactory(DefaultMediaSourceFactory(cacheDataSourceFactory)).build()
-
+            thumbnail.visibility = View.VISIBLE
             val videoUri = MediaItem.fromUri(Uri.parse(url.orEmpty())).buildUpon().build()
             player.playWhenReady = true
             player.repeatMode = Player.REPEAT_MODE_ALL
-            player?.setMediaItem(videoUri)
+            player.setMediaItem(videoUri)
             // When changing track, retain the latest frame instead of showing a black screen
             setKeepContentOnPlayerReset(true)
             setPlayer(player)
@@ -137,7 +137,8 @@ class PlayerViewAdapter {
                 playersMap.remove(item_index)
             if (item_index != null)
                 playersMap[item_index] = player
-
+            thumbnail.visibility = View.VISIBLE
+//            }
             this.player!!.addListener(object : Player.Listener {
                 override fun onPlaybackStateChanged(playbackState: Int) {
                     if (playbackState == ExoPlayer.STATE_BUFFERING) {
@@ -161,6 +162,10 @@ class PlayerViewAdapter {
                     }
                 }
             })
+
+//            if (type=="Music"){
+//                thumbnail.visibility = View.VISIBLE
+//            }
 
         }
     }

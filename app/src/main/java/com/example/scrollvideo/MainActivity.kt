@@ -31,48 +31,53 @@ class MainActivity : AppCompatActivity() {
         binding.rwRecyclerView.layoutManager = layoutManager
         val temp1 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp2 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp3 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp4 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp5 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp6 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp7 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp8 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
         )
         val temp9 = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
-            "https://picsum.photos/200/300"
+            "https://picsum.photos/200/300",false
+        )
+        val temp10 = VideoModel(
+            "https://actions.google.com/sounds/v1/science_fiction/ringing_ambient_background.ogg",
+            "https://picsum.photos/200/300",true
         )
 
-        list = arrayListOf(temp1, temp2, temp3, temp4, temp6, temp7, temp8, temp9)
+        list = arrayListOf(temp10,temp1, temp2, temp3, temp4, temp6, temp7, temp8, temp9,temp5)
         setRecyclerViewScrollListener()
 
 //        adapter.setItems(list)
 
         adapter = VideoPlayAdapter(list)
         binding.rwRecyclerView.adapter = adapter
+        binding.rwRecyclerView.isNestedScrollingEnabled=false
 
         snapHelper.attachToRecyclerView(binding.rwRecyclerView)
 //        scrollListener = object : RecyclerViewScrollListener() {
