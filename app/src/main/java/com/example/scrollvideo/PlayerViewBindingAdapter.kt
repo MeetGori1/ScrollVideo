@@ -146,14 +146,14 @@ class PlayerViewAdapter {
                         // Buffering..
                         // set progress bar visible here
                         // set thumbnail visible
-                        thumbnail.visibility = View.VISIBLE
+//                        thumbnail.visibility = View.VISIBLE
                         progressbar.visibility = View.VISIBLE
                     }
                     if (playbackState == ExoPlayer.STATE_READY) {
                         // [PlayerView] has fetched the video duration so this is the block to hide the buffering progress bar
                         progressbar.visibility = View.GONE
                         // set thumbnail gone
-                        thumbnail.visibility = View.GONE
+//                        thumbnail.visibility = View.GONE
                         callback.onVideoDurationRetrieved(this@loadVideo.player!!.duration, player)
                     }
                     if (playbackState == Player.STATE_READY && player.playWhenReady) {
