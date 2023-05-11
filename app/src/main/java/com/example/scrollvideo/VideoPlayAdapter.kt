@@ -1,5 +1,6 @@
 package com.example.scrollvideo
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -9,8 +10,8 @@ import com.example.scrollvideo.databinding.ItemVideoBinding
 
 
 class VideoPlayAdapter(var list: ArrayList<VideoModel>) :
-    RecyclerView.Adapter<VideoPlayAdapter.MyViewHolder>() ,PlayerStateCallback{
-
+    RecyclerView.Adapter<VideoPlayAdapter.MyViewHolder>(), PlayerStateCallback {
+    val TAG = "VIDEO PLAY ADAPTER"
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int,
     ): MyViewHolder {
@@ -20,27 +21,53 @@ class VideoPlayAdapter(var list: ArrayList<VideoModel>) :
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val position = holder.adapterPosition
+        val position = holder.absoluteAdapterPosition
+        Log.e("TAG ", "ononBindViewHolderViewRecycled ")
         PlayerViewAdapter.releaseRecycledPlayers(position)
         super.onViewRecycled(holder)
         holder.bindItem(list[position])
     }
     override fun onViewRecycled(holder: VideoPlayAdapter.MyViewHolder) {
-        val position = holder.adapterPosition
+        val position = holder.absoluteAdapterPosition
+        Log.e("TAG ", "onViewRecycled ")
         PlayerViewAdapter.releaseRecycledPlayers(position)
         super.onViewRecycled(holder)
     }
+    override fun onAttachedToRecyclerView(recyclerView: RecyclerView) {
+//        PlayerViewAdapter.playCurrentPlayer(recyclerView.getChildAdapterPosition(recyclerView))
+        Log.e("TAG ", "onAttachedToRecyclerView ")
+        super.onAttachedToRecyclerView(recyclerView)
+    }
+    override fun onDetachedFromRecyclerView(recyclerView: RecyclerView) {
+//        PlayerViewAdapter.pauseCurrentPlayer(recyclerView.getChildAdapterPosition(recyclerView))
+        Log.e("TAG ", "onDetachedFromRecyclerView ")
+        super.onDetachedFromRecyclerView(recyclerView)
+    }
+
+    override fun onViewAttachedToWindow(holder: MyViewHolder) {
+        PlayerViewAdapter.playCurrentPlayer(holder.absoluteAdapterPosition)
+        Log.e("TAG ", "onViewAttachedToWindow ")
+        super.onViewAttachedToWindow(holder)
+    }
+
+    override fun onViewDetachedFromWindow(holder: MyViewHolder) {
+        PlayerViewAdapter.pauseCurrentPlayer(holder.absoluteAdapterPosition)
+        Log.e("TAG ", "onViewDetachedFromWindow ")
+        super.onViewDetachedFromWindow(holder)
+    }
+
     override fun getItemCount(): Int {
         return list.size
     }
 
-  inner class MyViewHolder(val binding: ItemVideoBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class MyViewHolder(val binding: ItemVideoBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bindItem(bean: VideoModel) {
 
             binding.apply {
                 video = bean
-                callback =this@VideoPlayAdapter
-                    index = absoluteAdapterPosition
+                callback = this@VideoPlayAdapter
+                index = absoluteAdapterPosition
                 executePendingBindings()
             }
 
@@ -59,7 +86,6 @@ class VideoPlayAdapter(var list: ArrayList<VideoModel>) :
 
 
 //           BasePlayer.play(itemView.context,binding.media3PlayerView,bean)
-
 
 
         }

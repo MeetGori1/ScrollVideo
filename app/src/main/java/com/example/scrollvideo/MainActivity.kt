@@ -1,5 +1,8 @@
 package com.example.scrollvideo
 
+import android.content.Context
+import android.media.AudioFocusRequest
+import android.media.AudioManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -14,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
     lateinit var adapter: VideoPlayAdapter
     lateinit var layoutManager: GridLayoutManager
-    private lateinit var scrollListener: RecyclerViewScrollListener
+    val snapHelper: SnapHelper = PagerSnapHelper()
 
     var list: ArrayList<VideoModel> = ArrayList()
 
@@ -22,23 +25,55 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
-        layoutManager = GridLayoutManager(this, 1)
-        layoutManager.initialPrefetchItemCount = 5
-        binding.rwRecyclerView.layoutManager = layoutManager
-        val temp1=VideoModel("http://content.jwplatform.com/manifests/vM7nH0Kl.m3u8","https://picsum.photos/200/300")
-        val temp2=VideoModel("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4","https://picsum.photos/200/300")
-        val temp3=VideoModel("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4","https://picsum.photos/200/300")
-        val temp4=VideoModel("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4","https://picsum.photos/200/300")
-        val temp5=VideoModel("http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4","https://picsum.photos/200/300")
 
-        list= arrayListOf(temp1,temp2,temp3,temp4,temp5)
+        layoutManager = GridLayoutManager(this, 1)
+        layoutManager.initialPrefetchItemCount = 10
+        binding.rwRecyclerView.layoutManager = layoutManager
+        val temp1 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp2 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp3 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp4 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp5 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyrides.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp6 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/VolkswagenGTIReview.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp7 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp8 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WhatCarCanYouGetForAGrand.mp4",
+            "https://picsum.photos/200/300"
+        )
+        val temp9 = VideoModel(
+            "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerMeltdowns.mp4",
+            "https://picsum.photos/200/300"
+        )
+
+        list = arrayListOf(temp1, temp2, temp3, temp4, temp6, temp7, temp8, temp9)
         setRecyclerViewScrollListener()
 
 //        adapter.setItems(list)
 
         adapter = VideoPlayAdapter(list)
         binding.rwRecyclerView.adapter = adapter
-        val snapHelper: SnapHelper = PagerSnapHelper()
+
         snapHelper.attachToRecyclerView(binding.rwRecyclerView)
 //        scrollListener = object : RecyclerViewScrollListener() {
 //            override fun onItemIsFirstVisibleItem(index: Int) {
@@ -60,21 +95,20 @@ class MainActivity : AppCompatActivity() {
 //        }
 
 
-
     }
 
 
     private fun setRecyclerViewScrollListener() {
 
-        scrollListener = object : RecyclerViewScrollListener() {
-            override fun onItemIsFirstVisibleItem(index: Int) {
-                Log.d("visible item index", index.toString())
-                // play just visible item
-                if (index != -1)
-                    PlayerViewAdapter.playIndexThenPausePreviousPlayer(index)
-            }
-
-        }
+//        scrollListener = object : RecyclerViewScrollListener() {
+//            override fun onItemIsFirstVisibleItem(index: Int) {
+//                Log.d("visible item index", index.toString())
+//                // play just visible item
+//                if (index != -1)
+//                    PlayerViewAdapter.playIndexThenPausePreviousPlayer(index)
+//            }
+//
+//        }
 
 
 //        val scrollListener = object : RecyclerView.OnScrollListener() {
@@ -95,10 +129,13 @@ class MainActivity : AppCompatActivity() {
     override fun onPause() {
         super.onPause()
         PlayerViewAdapter.pauseAllPlayer()
+//        Controller.instance.audioManager.abandonAudioFocusRequest(Controller.instance.audioFocusRequest)
     }
 
     override fun onResume() {
-        PlayerViewAdapter.resumeAllPlayer()
+        val position = layoutManager.findLastVisibleItemPosition()
+        Log.e("current position", position.toString())
+        PlayerViewAdapter.playCurrentPlayer(position)
         super.onResume()
     }
 }

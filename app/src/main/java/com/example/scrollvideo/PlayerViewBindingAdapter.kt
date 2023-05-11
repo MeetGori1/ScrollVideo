@@ -1,15 +1,17 @@
 package com.example.scrollvideo
 
-import android.content.Context
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
-import android.widget.Toast
 import androidx.databinding.BindingAdapter
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
+import androidx.media3.datasource.DefaultHttpDataSource
+import androidx.media3.datasource.cache.CacheDataSource
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
 
 
@@ -20,12 +22,13 @@ import androidx.media3.ui.PlayerView
 
 class PlayerViewAdapter {
 
-    companion object{
+    companion object {
         // for hold all players generated
-        private var playersMap: MutableMap<Int, ExoPlayer>  = mutableMapOf()
+        private var playersMap: MutableMap<Int, ExoPlayer> = mutableMapOf()
+
         // for hold current player
         private var currentPlayingVideo: Pair<Int, ExoPlayer>? = null
-        fun releaseAllPlayers(){
+        fun releaseAllPlayers() {
             playersMap.map {
                 it.value.release()
             }
@@ -34,6 +37,9 @@ class PlayerViewAdapter {
         fun pauseAllPlayer() {
             playersMap.map {
                 it.value.pause()
+
+                Controller.instance.audioManager.abandonAudioFocus(Controller.instance.audioFocusChangeListener)
+                Controller.instance.audioManager.abandonAudioFocusRequest(Controller.instance.audioFocusRequest)
             }
         }
 
@@ -45,9 +51,18 @@ class PlayerViewAdapter {
 
 
         // call when item recycled to improve performance
-        fun releaseRecycledPlayers(index: Int){
+        fun releaseRecycledPlayers(index: Int) {
             playersMap[index]?.release()
         }
+
+        fun pauseCurrentPlayer(index: Int) {
+            playersMap[index]?.pause()
+        }
+
+        fun playCurrentPlayer(index: Int) {
+            playersMap[index]?.play()
+        }
+
 
         // call when scroll to pause any playing player
         private fun pauseCurrentPlayingVideo() {
@@ -70,23 +85,48 @@ class PlayerViewAdapter {
         *  progressbar for show when start buffering stream
         * thumbnail for show before video start
         * */
+
         @androidx.annotation.OptIn(androidx.media3.common.util.UnstableApi::class)
         @JvmStatic
-        @BindingAdapter(value = ["video_url", "on_state_change", "progressbar", "thumbnail", "item_index", "autoPlay"], requireAll = false)
-        fun PlayerView.loadVideo(url: String, callback: PlayerStateCallback, progressbar: ProgressBar, thumbnail: ImageView, item_index: Int? = null, autoPlay: Boolean = false) {
+        @BindingAdapter(
+            value = ["video_url", "on_state_change", "progressbar", "thumbnail", "item_index", "autoPlay"],
+            requireAll = false
+        )
+        fun PlayerView.loadVideo(
+            url: String,
+            callback: PlayerStateCallback,
+            progressbar: ProgressBar,
+            thumbnail: ImageView,
+            item_index: Int? = null,
+            autoPlay: Boolean = false
+        ) {
             if (url == null) return
-            val player = ExoPlayer.Builder(context).build()
+            var player: ExoPlayer
 
+            val httpDataSourceFactory = DefaultHttpDataSource.Factory()
+                .setAllowCrossProtocolRedirects(true)
+
+            val cacheDataSourceFactory = CacheDataSource.Factory()
+                .setCache(Controller.instance.simpleCache)
+                .setUpstreamDataSourceFactory(httpDataSourceFactory)
+                .setFlags(CacheDataSource.FLAG_IGNORE_CACHE_ON_ERROR)
+
+            player = ExoPlayer.Builder(context)
+                .setRenderersFactory(DefaultRenderersFactory(context).setEnableDecoderFallback(true))
+                .setMediaSourceFactory(DefaultMediaSourceFactory(cacheDataSourceFactory)).build()
+
+            val videoUri = MediaItem.fromUri(Uri.parse(url.orEmpty())).buildUpon().build()
             player.playWhenReady = true
             player.repeatMode = Player.REPEAT_MODE_ALL
+            player?.setMediaItem(videoUri)
             // When changing track, retain the latest frame instead of showing a black screen
             setKeepContentOnPlayerReset(true)
             setPlayer(player)
             // We'll show the controller, change to true if want controllers as pause and start
-            this.useController = false
+            this.useController = true
             // Provide url to load the video from here
 //            val mediaSource = ProgressiveMediaSource.Factory(DefaultHttpDataSourceFactory("Demo")).createMediaSource(Uri.parse(url))
-            player.setMediaItem(MediaItem.fromUri(Uri.parse(url)))
+//            player.setMediaItem(MediaItem.fromUri(Uri.parse(url)))
 
             player.prepare()
 
@@ -115,12 +155,13 @@ class PlayerViewAdapter {
                         thumbnail.visibility = View.GONE
                         callback.onVideoDurationRetrieved(this@loadVideo.player!!.duration, player)
                     }
-                    if (playbackState == Player.STATE_READY && player.playWhenReady){
+                    if (playbackState == Player.STATE_READY && player.playWhenReady) {
                         // [PlayerView] has started playing/resumed the video
                         callback.onStartedPlaying(player)
                     }
                 }
             })
+
         }
     }
 }
