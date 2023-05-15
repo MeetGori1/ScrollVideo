@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
     private val snapHelper: SnapHelper = PagerSnapHelper()
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         binding = ActivityMainBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
@@ -30,32 +29,44 @@ class MainActivity : AppCompatActivity() {
 //        layoutManager.initialPrefetchItemCount = 10
         binding.rwRecyclerView.layoutManager = layoutManager
 
-        val music= VideoModel(
+        val music = VideoModel(
             "https://www.kozco.com/tech/piano2-CoolEdit.mp3",
-            "https://picsum.photos/200/300",3,"","","","",""
+            "https://picsum.photos/200/300", 3, "", "", "", "", ""
         )
 
-        val poll= VideoModel(
-            "", "",2,"","","What you Like more ?","Tea","Coffee"
+        val poll = VideoModel(
+            "", "", 2, "", "", "What you Like more ?", "Tea", "Coffee"
         )
 
-        val thisOrThat= VideoModel(
-            "", "",4,"https://picsum.photos/200","https://picsum.photos/seed/picsum/200/300","","",""
+        val thisOrThat = VideoModel(
+            "",
+            "",
+            4,
+            "https://picsum.photos/200",
+            "https://picsum.photos/seed/picsum/200/300",
+            "",
+            "",
+            ""
         )
 
         val video = VideoModel(
             "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/WeAreGoingOnBullrun.mp4",
-            "https://picsum.photos/200/300",1,"","","","",""
+            "https://picsum.photos/200/300", 1, "", "", "", "", ""
         )
 
-        var list = arrayListOf(thisOrThat,video,music,poll,thisOrThat,poll,video,thisOrThat,video)
+        var list =
+            arrayListOf(thisOrThat, video, music, poll, thisOrThat, poll, video, thisOrThat, video)
         setRecyclerViewScrollListener()
 
 //        adapter.setItems(list)
 
-        adapter = VideoPlayAdapter(this,list)
+        adapter = VideoPlayAdapter(this, list) {
+            layoutManager.isSmoothScrollbarEnabled = true
+            var position = layoutManager.findLastVisibleItemPosition()
+            layoutManager.scrollToPosition(position + 1)
+        }
         binding.rwRecyclerView.adapter = adapter
-        binding.rwRecyclerView.isNestedScrollingEnabled=false
+        binding.rwRecyclerView.isNestedScrollingEnabled = false
 
         snapHelper.attachToRecyclerView(binding.rwRecyclerView)
 //        scrollListener = object : RecyclerViewScrollListener() {

@@ -1,6 +1,7 @@
 package com.example.scrollvideo.dataBindingClasses
 
 import android.net.Uri
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -121,7 +122,7 @@ class PlayerViewAdapter {
             thumbnail.visibility = View.VISIBLE
             val videoUri = MediaItem.fromUri(Uri.parse(url.orEmpty())).buildUpon().build()
             player.playWhenReady = false
-            player.repeatMode = Player.REPEAT_MODE_ALL
+            player.repeatMode = Player.REPEAT_MODE_OFF
             player.setMediaItem(videoUri)
             // When changing track, retain the latest frame instead of showing a black screen
             setKeepContentOnPlayerReset(true)
@@ -160,9 +161,16 @@ class PlayerViewAdapter {
 //                        thumbnail.visibility = View.GONE
                         callback.onVideoDurationRetrieved(this@loadVideo.player!!.duration, player)
                     }
-                    if (playbackState == Player.STATE_READY && player.playWhenReady) {
+                    if (playbackState == Player.STATE_READY ) {
                         // [PlayerView] has started playing/resumed the video
                         callback.onStartedPlaying(player)
+                    }
+                    if (playbackState == Player.STATE_ENDED ) {
+                        Log.e("Video Finished","Ended")
+                        // [PlayerView] has started playing/resumed the video
+//                        player.playWhenReady = true
+                        player.seekTo(0)
+                        callback.onFinishedPlaying(player)
                     }
                 }
             })

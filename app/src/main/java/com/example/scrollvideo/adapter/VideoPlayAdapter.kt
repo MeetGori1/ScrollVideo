@@ -16,7 +16,7 @@ import com.example.scrollvideo.databinding.ItemVideoBinding
 import com.example.scrollvideo.model.VideoModel
 
 
-class VideoPlayAdapter(var context: Context,var list: ArrayList<VideoModel>) :
+class VideoPlayAdapter(var context: Context,var list: ArrayList<VideoModel>,val callback: ()->Unit) :
     RecyclerView.Adapter<RecyclerView.ViewHolder>(), PlayerStateCallback {
     val TAG = "VIDEO PLAY ADAPTER"
     private val inflater = LayoutInflater.from(context)
@@ -128,19 +128,20 @@ class VideoPlayAdapter(var context: Context,var list: ArrayList<VideoModel>) :
     }
 
     override fun onVideoDurationRetrieved(duration: Long, player: Player) {
-
+        Log.e("onVideoDurationRetrieved","onVideoDurationRetrieved")
     }
 
     override fun onVideoBuffering(player: Player) {
-
+        Log.e("onVideoBuffering","onVideoBuffering")
     }
 
     override fun onStartedPlaying(player: Player) {
-
+        Log.e("onStartedPlaying","onStartedPlaying")
     }
 
     override fun onFinishedPlaying(player: Player) {
-
+        callback.invoke()
+Log.e("onFinishedPlaying","onFinishedPlaying")
     }
 
     companion object {
