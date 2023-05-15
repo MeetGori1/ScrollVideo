@@ -3,8 +3,8 @@
 
     <data>
         <variable
-            name="video"
-            type="com.example.scrollvideo.VideoModel" />
+            name="Poll"
+            type="com.example.scrollvideo.model.VideoModel" />
     </data>
 
     <LinearLayout
@@ -13,10 +13,24 @@
         android:layout_height="match_parent">
 
         <androidx.appcompat.widget.AppCompatTextView
-            android:id="@+id/txtPollTitle"
+            android:id="@+id/txtPollQuestion"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{video.url}"
+            android:text="@{Poll.question}"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtOptionOne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{Poll.option1}"
+            />
+
+        <androidx.appcompat.widget.AppCompatTextView
+            android:id="@+id/txtOptionTwo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@{Poll.option2}"
             />
 
 

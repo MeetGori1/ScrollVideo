@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="thisOrThat"
+            type="com.example.scrollvideo.model.VideoModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/txtThisImage"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@{thisOrThat.thisImage}"-->
+<!--            />-->
+
+<!--        <androidx.appcompat.widget.AppCompatTextView-->
+<!--            android:id="@+id/txtThatImage"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@{thisOrThat.thatImage}"-->
+<!--            />-->
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/thisImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="#fff"
+            android:scaleType="fitXY"
+            android:layout_weight="1"
+            android:src="@{thisOrThat.thisImage}"
+            app:thumbnail="@{thisOrThat.thisImage}"
+            />
+
+        <androidx.appcompat.widget.AppCompatImageView
+            android:id="@+id/thatImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:adjustViewBounds="true"
+            android:background="#fff"
+            android:scaleType="fitXY"
+            android:layout_weight="1"
+            android:src="@{thisOrThat.thatImage}"
+            app:thumbnail="@{thisOrThat.thatImage}"
+            />
+
+    </LinearLayout>
+</layout>

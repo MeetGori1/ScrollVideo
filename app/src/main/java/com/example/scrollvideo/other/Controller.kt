@@ -1,4 +1,4 @@
-package com.example.scrollvideo
+package com.example.scrollvideo.other
 
 import android.app.Activity
 import android.app.Application
@@ -70,7 +70,7 @@ class Controller : Application() {
     override fun onTerminate() {
         unregisterActivityLifecycleCallbacks(activeActivityCallbacks)
         Log.e("terminated","terminated")
-        Controller.instance.audioManager.abandonAudioFocusRequest(Controller.instance.audioFocusRequest)
+        instance.audioManager.abandonAudioFocusRequest(instance.audioFocusRequest)
         super.onTerminate()
     }
 

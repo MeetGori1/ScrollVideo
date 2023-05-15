@@ -1,4 +1,4 @@
-package com.example.scrollvideo
+package com.example.scrollvideo.other
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView

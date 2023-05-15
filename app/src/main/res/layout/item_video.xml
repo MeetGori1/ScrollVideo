@@ -6,11 +6,11 @@
 
         <variable
             name="video"
-            type="com.example.scrollvideo.VideoModel" />
+            type="com.example.scrollvideo.model.VideoModel" />
 
         <variable
             name="callback"
-            type="com.example.scrollvideo.PlayerStateCallback" />
+            type="com.example.scrollvideo.dataBindingClasses.PlayerStateCallback" />
 
         <variable
             name="index"

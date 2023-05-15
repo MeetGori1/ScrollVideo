@@ -1,4 +1,4 @@
-package com.example.scrollvideo
+package com.example.scrollvideo.other
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity

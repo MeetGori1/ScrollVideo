@@ -1,4 +1,4 @@
-package com.example.scrollvideo
+package com.example.scrollvideo.dataBindingClasses
 
 import androidx.media3.common.Player
 

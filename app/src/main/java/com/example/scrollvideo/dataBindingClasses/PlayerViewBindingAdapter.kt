@@ -1,4 +1,4 @@
-package com.example.scrollvideo
+package com.example.scrollvideo.dataBindingClasses
 
 import android.net.Uri
 import android.view.View
@@ -13,6 +13,7 @@ import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.source.DefaultMediaSourceFactory
 import androidx.media3.ui.PlayerView
+import com.example.scrollvideo.other.Controller
 
 
 //// extension function for show toast
@@ -60,7 +61,9 @@ class PlayerViewAdapter {
         }
 
         fun playCurrentPlayer(index: Int) {
-            playersMap[index]?.play()
+            if (playersMap[index]?.isPlaying==false) {
+                playersMap[index]?.play()
+            }
         }
 
 
@@ -101,6 +104,7 @@ class PlayerViewAdapter {
             autoPlay: Boolean = false
         ) {
             if (url == null) return
+            if (url=="") return
             var player: ExoPlayer
 
             val httpDataSourceFactory = DefaultHttpDataSource.Factory()
@@ -116,7 +120,7 @@ class PlayerViewAdapter {
                 .setMediaSourceFactory(DefaultMediaSourceFactory(cacheDataSourceFactory)).build()
             thumbnail.visibility = View.VISIBLE
             val videoUri = MediaItem.fromUri(Uri.parse(url.orEmpty())).buildUpon().build()
-            player.playWhenReady = true
+            player.playWhenReady = false
             player.repeatMode = Player.REPEAT_MODE_ALL
             player.setMediaItem(videoUri)
             // When changing track, retain the latest frame instead of showing a black screen
