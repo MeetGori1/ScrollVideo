@@ -27,8 +27,8 @@ class LoadImageBindingAdapter {
 
         @JvmStatic
         @BindingAdapter("android:visibility")
-        fun setVisibility(view: View, value: Boolean) {
-            view.visibility = if (value) View.VISIBLE else View.GONE
+        fun setVisibility(view: View, value: Int) {
+            view.visibility = if (value==3) View.VISIBLE else View.GONE
         }
     }
 }

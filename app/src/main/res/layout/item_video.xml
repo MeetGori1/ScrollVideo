@@ -45,6 +45,7 @@
             android:adjustViewBounds="true"
             android:background="#fff"
             android:scaleType="fitXY"
+            android:src="@{video.thumbnail}"
             app:thumbnail="@{video.thumbnail}"
             android:visibility="@{video.type}"
             />
