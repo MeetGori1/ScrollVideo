@@ -169,7 +169,7 @@ class PlayerViewAdapter {
                         Log.e("Video Finished","Ended")
                         // [PlayerView] has started playing/resumed the video
 //                        player.playWhenReady = true
-                        player.seekTo(0)
+                        player.seekTo(1)
                         callback.onFinishedPlaying(player)
                     }
                 }
